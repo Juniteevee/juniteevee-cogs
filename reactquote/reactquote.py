@@ -8,6 +8,6 @@ class ReactQuote(commands.Cog):
 
     @commands.command()
     async def reactquote(self, ctx):
-        """This does stuff!"""
+        """TestCommand"""
         # Your code will go here
-        await ctx.send("I can do stuff!")
+        await ctx.send("I can do stuff, really!")
