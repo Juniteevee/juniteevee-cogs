@@ -1,0 +1,8 @@
+{
+    "AUTHOR" : "Juni (juniteevee)",
+    "DESCRIPTION" : "Save quotes by reacting to them and bring them up later",
+    "DISABLED" : false,
+    "SHORT" : "Save quotes by reacting to them and bring them up later",
+    "NAME" : "React Quotes",
+    "INSTALL_CMD" : "React Quotes. Install at own risk"
+}
