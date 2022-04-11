@@ -32,7 +32,7 @@ class ReactQuote(commands.Cog):
     async def quote(self, ctx: commands.Context):
         """Recall Random Quote"""
         # Your code will go here
-        quotes = await self.config.guild.quotes()
+        quotes = await self.config.guild(ctx.guild).quotes()
         if quotes and len(quotes) > 0:
             num = randrange(len(quotes))
             await ctx.send(embed=self._buildQuote(quotes[num], num+1))
