@@ -52,7 +52,7 @@ class ReactQuote(commands.Cog):
         # Your code will go here
         quotes = await self.config.guild(ctx.guild).quotes()
         if quotes and len(quotes) > 0:
-            if(query.count == 0):
+            if(query == ""):
                 num = randrange(len(quotes))
                 message = await ctx.guild.get_channel(quotes[num]['channelId']).fetch_message(quotes[num]['messageId'])
                 await ctx.send(embed=self._buildQuote(message, num+1))
