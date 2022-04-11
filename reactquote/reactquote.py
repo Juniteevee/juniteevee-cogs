@@ -18,13 +18,17 @@ class ReactQuote(commands.Cog):
     async def _addQuote(self, msg:discord.Message):
         formattedMsg = {
             "channelId": msg.channel.id,
-            "messageId": msg.id
+            "messageId": msg.id,
+            "authorId": msg.author.id
         }
         guild_group = self.config.guild(msg.guild)
         quotes = await guild_group.quotes()
-        quotes.append(formattedMsg)
-        await guild_group.quotes.set(quotes)
-        return len(quotes)
+        if quotes.count(formattedMsg) > 0:
+            return -1
+        else:
+            quotes.append(formattedMsg)
+            await guild_group.quotes.set(quotes)
+            return len(quotes)
 
     def _buildQuote(self, message, num:int):
         quote = f"{message.content}\n[(Jump)]({message.jump_url})"
@@ -53,7 +57,8 @@ class ReactQuote(commands.Cog):
             message: discord.Message = await self.bot.get_channel(payload.channel_id).fetch_message(payload.message_id)
             user = payload.member
             channel: discord.TextChannel = message.channel
-            await self._addQuote(message)
-            await channel.send(f"New quote added by {user.display_name}\n({message.jump_url})")
+            pos = await self._addQuote(message)
+            if pos >= 0:
+                await channel.send(f"New quote added by {user.display_name} #{pos+1}\n({message.jump_url})")
         else:
             return
