@@ -25,7 +25,7 @@ class ReactQuote(commands.Cog):
 
     @commands.Cog.listener("on_raw_reaction_add")
     async def on_raw_reaction_add(self, payload:discord.RawReactionActionEvent):
-        message = await self.bot.get_channel(payload.channel_id)
+        message = await self.bot.get_channel(payload.channel_id).fetch_message(payload.message_id)
         message.channel.send("Did I work")
         """On React"""
         if str(payload.emoji) == '💬':
