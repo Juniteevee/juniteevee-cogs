@@ -17,9 +17,10 @@ class ReactQuote(commands.Cog):
 
     async def _addQuote(self, msg:discord.Message):
         guild_group = self.config.guild(msg.guild)
-        async with guild_group.quotes() as quotes:
-            quotes.append(msg)
-        return len(await guild_group.quotes())
+        quotes = await guild_group.quotes()
+        quotes.append(msg)
+        await guild_group.quotes.set(quotes)
+        return len(quotes)
 
     def _buildQuote(self, message:discord.Message, num:int):
         quote = f"{message.content}\n[(Jump)]({message.jump_url})"
