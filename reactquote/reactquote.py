@@ -47,7 +47,7 @@ class ReactQuote(commands.Cog):
 
     @commands.guild_only()
     @commands.command()
-    async def quote(self, ctx: commands.Context, *, query: str):
+    async def quote(self, ctx: commands.Context, *, query: str = ""):
         """Recall Random Quote"""
         # Your code will go here
         quotes = await self.config.guild(ctx.guild).quotes()
