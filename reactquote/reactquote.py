@@ -58,9 +58,10 @@ class ReactQuote(commands.Cog):
 
     @commands.admin_or_permissions(manage_guild=True)
     @commands.command()
-    async def removeQuote(self, ctx: commands.Context, n:int):
+    async def removequote(self, ctx: commands.Context, quote_num:int):
         """Remove Quote"""
-        await ctx.send(f"I Got {n}")
+        await self._removeQuote(ctx.guild, quote_num)
+        await ctx.send(f"Removed quote #{quote_num}.")
 
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload:discord.RawReactionActionEvent):
