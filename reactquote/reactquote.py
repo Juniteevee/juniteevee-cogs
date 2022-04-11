@@ -13,7 +13,7 @@ class ReactQuote(commands.Cog):
 
     def _buildQuote(self, message:discord.Message):
         
-        quote = "Quoted text will be here\n {message.jump_url}"
+        quote = f"Quoted text will be here\n[(Jump)]({message.jump_url})"
         timestamp = datetime.now()
         embed = discord.Embed(timestamp=timestamp)
         embed.set_author(name=message.author.display_name, icon_url=message.author.avatar_url)
@@ -33,4 +33,4 @@ class ReactQuote(commands.Cog):
             message: discord.Message = await self.bot.get_channel(payload.channel_id).fetch_message(payload.message_id)
             user = payload.member
             channel: discord.TextChannel = message.channel
-            await channel.send("I'd quote that if I could...\n{message.jump_url}")
+            await channel.send("I'd quote that if I could...")
