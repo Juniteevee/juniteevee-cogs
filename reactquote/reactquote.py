@@ -16,13 +16,17 @@ class ReactQuote(commands.Cog):
         self.config.register_guild(**default_guild)
 
     async def _addQuote(self, msg:discord.Message):
+        formattedMsg = {
+            "channelId": msg.channel.id,
+            "messageId": msg.id
+        }
         guild_group = self.config.guild(msg.guild)
         quotes = await guild_group.quotes()
-        quotes.append(msg)
+        quotes.append(formattedMsg)
         await guild_group.quotes.set(quotes)
         return len(quotes)
 
-    def _buildQuote(self, message:discord.Message, num:int):
+    def _buildQuote(self, message, num:int):
         quote = f"{message.content}\n[(Jump)]({message.jump_url})"
         timestamp = message.created_at
         embed = discord.Embed(timestamp=timestamp)
@@ -37,7 +41,8 @@ class ReactQuote(commands.Cog):
         quotes = await self.config.guild(ctx.guild).quotes()
         if quotes and len(quotes) > 0:
             num = randrange(len(quotes))
-            await ctx.send(embed=self._buildQuote(quotes[num], num+1))
+            message = await ctx.guild.getChannel(quotes[num].channelId).fetch_message(quotes[num].messageId)
+            await ctx.send(embed=self._buildQuote(message, num+1))
         else:
             await ctx.send("No quotes added yet. Say something funny~ OwO")
 
