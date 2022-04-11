@@ -60,7 +60,7 @@ class ReactQuote(commands.Cog):
     @commands.command()
     async def removequote(self, ctx: commands.Context, quote_num:int):
         """Remove Quote"""
-        await self._removeQuote(ctx.guild, quote_num)
+        await self._removeQuote(ctx.guild, quote_num-1)
         await ctx.send(f"Removed quote #{quote_num}.")
 
     @commands.Cog.listener()
