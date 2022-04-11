@@ -1,6 +1,7 @@
 from redbot.core import commands
 from redbot.core import Config
 from random import randrange
+import re
 import discord
 from datetime import datetime
 
@@ -44,25 +45,33 @@ class ReactQuote(commands.Cog):
         embed.add_field(name=f"#{num}", value=quote, inline=False)
         return embed
 
+    @commands.guild_only()
     @commands.command()
-    async def quote(self, ctx: commands.Context):
+    async def quote(self, ctx: commands.Context, *, query: str):
         """Recall Random Quote"""
         # Your code will go here
         quotes = await self.config.guild(ctx.guild).quotes()
         if quotes and len(quotes) > 0:
-            num = randrange(len(quotes))
-            message = await ctx.guild.get_channel(quotes[num]['channelId']).fetch_message(quotes[num]['messageId'])
-            await ctx.send(embed=self._buildQuote(message, num+1))
+            if(query.count == 0):
+                num = randrange(len(quotes))
+                message = await ctx.guild.get_channel(quotes[num]['channelId']).fetch_message(quotes[num]['messageId'])
+                await ctx.send(embed=self._buildQuote(message, num+1))
+            elif(re.search("^\d+$", query) is not None):
+                num = int(query)
+                message = await ctx.guild.get_channel(quotes[num-1]['channelId']).fetch_message(quotes[num-1]['messageId'])
+                await ctx.send(embed=self._buildQuote(message, num))
+
         else:
             await ctx.send("No quotes added yet. Say something funny~ OwO")
 
     @commands.admin_or_permissions(manage_guild=True)
+    @commands.guild_only()
     @commands.command()
     async def removequote(self, ctx: commands.Context, quote_num:int):
         """Remove Quote"""
         await self._removeQuote(ctx.guild, quote_num-1)
         await ctx.send(f"Removed quote #{quote_num}.")
-
+    
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload:discord.RawReactionActionEvent):
         """On React"""
