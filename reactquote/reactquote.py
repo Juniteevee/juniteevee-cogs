@@ -47,5 +47,5 @@ class ReactQuote(commands.Cog):
             message: discord.Message = await self.bot.get_channel(payload.channel_id).fetch_message(payload.message_id)
             user = payload.member
             channel: discord.TextChannel = message.channel
-            num = await self._addQuote(message)
+            """num = await self._addQuote(message)"""
             await channel.send(f"New quote added by {user.display_name} as #{num+1}\n({message.jump_url})")
