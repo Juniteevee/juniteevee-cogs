@@ -16,7 +16,7 @@ class ReactQuote(commands.Cog):
         quote = f"Quoted text will be here\n[(Jump)]({message.jump_url})"
         timestamp = datetime.now()
         embed = discord.Embed(timestamp=timestamp)
-        embed.set_author(name=message.author.mention(), icon_url=message.author.avatar_url)
+        embed.set_author(name=message.author.display_name, icon_url=message.author.avatar_url)
         embed.add_field(name="#1", value=quote, inline=False)
         return embed
 
