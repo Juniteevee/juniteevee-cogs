@@ -33,4 +33,4 @@ class ReactQuote(commands.Cog):
             message: discord.Message = await self.bot.get_channel(payload.channel_id).fetch_message(payload.message_id)
             user = payload.member
             channel: discord.TextChannel = message.channel
-            await channel.send("I'd quote that if I could...")
+            await channel.send("I'd quote that if I could...\n{message.jump_url}")
