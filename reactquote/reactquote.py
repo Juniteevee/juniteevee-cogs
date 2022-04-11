@@ -1,5 +1,6 @@
 from redbot.core import commands
 import discord
+from datetime import datetime
 
 class ReactQuote(commands.Cog):
     """Cog to store quotes by reacting with speech bubble"""
@@ -10,11 +11,18 @@ class ReactQuote(commands.Cog):
     def _wrapQuote(self, msg):
         return msg
 
+    def _buildQuote(self):
+        embed = discord.Embed()
+        embed.add_field(name="#1", value="Quoted text will be here", inline=False)
+        time = datetime.now()
+        embed.set_footer(text=time.ctime())
+        return embed
+
     @commands.command()
     async def quote(self, ctx: commands.Context):
         """Recall Random Quote"""
         # Your code will go here
-        await ctx.send("I'd recall a random quote if I could...")
+        await ctx.send(embed=self._buildQuote())
 
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload:discord.RawReactionActionEvent):
