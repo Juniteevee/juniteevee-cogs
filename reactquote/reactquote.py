@@ -29,6 +29,12 @@ class ReactQuote(commands.Cog):
             quotes.append(formattedMsg)
             await guild_group.quotes.set(quotes)
             return len(quotes)
+    
+    async def _removeQuote(self, guild: discord.Guild, n:int):
+        guild_group = self.config.guild(guild)
+        quotes = await guild_group.quotes()
+        quotes.pop(n)
+        await guild_group.quotes.set(quotes)
 
     def _buildQuote(self, message, num:int):
         quote = f"{message.content}\n[(Jump)]({message.jump_url})"
@@ -49,6 +55,12 @@ class ReactQuote(commands.Cog):
             await ctx.send(embed=self._buildQuote(message, num+1))
         else:
             await ctx.send("No quotes added yet. Say something funny~ OwO")
+
+    @commands.admin_or_permissions(manage_guild=True)
+    @commands.command()
+    async def removeQuote(self, ctx: commands.Context, n:int):
+        """Remove Quote"""
+        await ctx.send(f"I Got {n}")
 
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload:discord.RawReactionActionEvent):
