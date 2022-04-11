@@ -34,5 +34,5 @@ class ReactQuote(commands.Cog):
             message.channel.send('Did I work')
 
     @commands.Cog.listener()
-    async def on_reaction_add(reaction: discord.Reaction, user: discord.User):
+    async def on_reaction_add(self, reaction: discord.Reaction, user: discord.User):
         reaction.message.channel.send('Did I work2')
