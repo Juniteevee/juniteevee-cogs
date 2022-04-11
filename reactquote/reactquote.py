@@ -11,17 +11,10 @@ class ReactQuote(commands.Cog):
         return msg
 
     @commands.command()
-    async def reactquote(self, ctx: commands.Context):
-        """TestCommand"""
-        # Your code will go here
-        await ctx.send("I can do stuff, really!")
-        
-
-    @commands.command()
     async def quote(self, ctx: commands.Context):
         """TestCommand"""
         # Your code will go here
-        await ctx.send("I can do stuff, really!")
+        await ctx.send("I'd recall a random quote if I could...")
 
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload:discord.RawReactionActionEvent):
