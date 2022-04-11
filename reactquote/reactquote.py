@@ -48,18 +48,27 @@ class ReactQuote(commands.Cog):
     @commands.guild_only()
     @commands.command()
     async def quote(self, ctx: commands.Context, *, query: str = ""):
-        """Recall Random Quote"""
+        """
+        Recall Quote
+
+        'quote' returns random
+        'quote 3' returns the #3 quote
+        """
         # Your code will go here
         quotes = await self.config.guild(ctx.guild).quotes()
-        if quotes and len(quotes) > 0:
+        numQuotes = len(quotes)
+        if numQuotes > 0:
             if(query == ""):
                 num = randrange(len(quotes))
                 message = await ctx.guild.get_channel(quotes[num]['channelId']).fetch_message(quotes[num]['messageId'])
                 await ctx.send(embed=self._buildQuote(message, num+1))
             elif(re.search("^\d+$", query) is not None):
                 num = int(query)
-                message = await ctx.guild.get_channel(quotes[num-1]['channelId']).fetch_message(quotes[num-1]['messageId'])
-                await ctx.send(embed=self._buildQuote(message, num))
+                if num <= numQuotes:
+                    message = await ctx.guild.get_channel(quotes[num-1]['channelId']).fetch_message(quotes[num-1]['messageId'])
+                    await ctx.send(embed=self._buildQuote(message, num))
+                else:
+                    await ctx.send(f"There are only {numQuotes} quotes")
 
         else:
             await ctx.send("No quotes added yet. Say something funny~ OwO")
