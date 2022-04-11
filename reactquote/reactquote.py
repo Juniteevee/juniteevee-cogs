@@ -23,16 +23,17 @@ class ReactQuote(commands.Cog):
         # Your code will go here
         await ctx.send("I can do stuff, really!")
 
-    @commands.Cog.listener()
+    @commands.Cog.listener("on_raw_reaction_add")
     async def on_raw_reaction_add(self, payload:discord.RawReactionActionEvent):
         message = await self.bot.get_channel(payload.channel_id)
-        message.channel.send('Did I work')
+        message.channel.send("Did I work")
         """On React"""
         if str(payload.emoji) == '💬':
-            message = await self.bot.get_channel(payload.channel_id).fetch_message(payload.message_id)
+            message: discord.Message = await self.bot.get_channel(payload.channel_id).fetch_message(payload.message_id)
             user = payload.member
-            message.channel.send('Did I work')
+            channel: discord.TextChannel = message.channel
+            channel.send("Did I work")
 
     @commands.Cog.listener()
     async def on_reaction_add(self, reaction: discord.Reaction, user: discord.User):
-        reaction.message.channel.send('Did I work2')
+        reaction.message.channel.send("Did I work2")
