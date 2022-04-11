@@ -41,7 +41,7 @@ class ReactQuote(commands.Cog):
         quotes = await self.config.guild(ctx.guild).quotes()
         if quotes and len(quotes) > 0:
             num = randrange(len(quotes))
-            message = await ctx.guild.getChannel(quotes[num].channelId).fetch_message(quotes[num].messageId)
+            message = await ctx.guild.get_channel(quotes[num].channelId).fetch_message(quotes[num].messageId)
             await ctx.send(embed=self._buildQuote(message, num+1))
         else:
             await ctx.send("No quotes added yet. Say something funny~ OwO")
