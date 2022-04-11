@@ -11,8 +11,9 @@ class ReactQuote(commands.Cog):
     def _wrapQuote(self, msg):
         return msg
 
-    def _buildQuote(self):
-        quote = "Quoted text will be here\n- @Juni [(Jump)](https://discord.com/channels/898593470606889000/929701114641809438/963069688177360927)"
+    def _buildQuote(self, message:discord.Message):
+        
+        quote = "Quoted text will be here\n- <@{message.author.display_name}> [(Jump)]({message.jump_url})"
         timestamp = datetime.now()
         embed = discord.Embed(timestamp=timestamp)
         embed.add_field(name="#1", value=quote, inline=False)
@@ -22,7 +23,7 @@ class ReactQuote(commands.Cog):
     async def quote(self, ctx: commands.Context):
         """Recall Random Quote"""
         # Your code will go here
-        await ctx.send(embed=self._buildQuote())
+        await ctx.send(embed=self._buildQuote(ctx.message))
 
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload:discord.RawReactionActionEvent):
