@@ -12,7 +12,7 @@ class ReactQuote(commands.Cog):
 
     @commands.command()
     async def quote(self, ctx: commands.Context):
-        """TestCommand"""
+        """Recall Random Quote"""
         # Your code will go here
         await ctx.send("I'd recall a random quote if I could...")
 
