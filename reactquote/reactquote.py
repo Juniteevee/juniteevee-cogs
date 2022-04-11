@@ -12,12 +12,10 @@ class ReactQuote(commands.Cog):
         return msg
 
     def _buildQuote(self):
-        embed = discord.Embed()
         quote = "Quoted text will be here\n- @Juni [(Jump)](https://discord.com/channels/898593470606889000/929701114641809438/963069688177360927)"
+        timestamp = datetime.now()
+        embed = discord.Embed(timestamp=timestamp)
         embed.add_field(name="#1", value=quote, inline=False)
-        time = datetime.now()
-        footer = "<t:{time}>"
-        embed.set_footer(text=footer)
         return embed
 
     @commands.command()
