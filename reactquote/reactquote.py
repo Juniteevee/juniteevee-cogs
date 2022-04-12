@@ -70,9 +70,9 @@ class ReactQuote(commands.Cog):
                     await ctx.send(embed=self._buildQuote(message, num))
                 else:
                     await ctx.send(f"There are only {numQuotes} quotes")
-            elif(re.search("^@.+$", query) is not None):
+            elif(len(ctx.message.mentions) > 0):
                 """Case username"""
-                member: discord.Member = ctx.guild.get_member_named(query)
+                member: discord.Member = ctx.message.mentions[0]
                 if member is None:
                     await ctx.send(f"{query} not found.\nWho are you talking about? OwO")
                 else:
