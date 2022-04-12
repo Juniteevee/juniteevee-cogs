@@ -74,7 +74,7 @@ class ReactQuote(commands.Cog):
                 """Case username"""
                 member: discord.Member = ctx.guild.get_member_named(query)
                 if member is None:
-                    ctx.send("User not found.\nWho are you talking about? OwO")
+                    ctx.send(f"{query} not found.\nWho are you talking about? OwO")
                 else:
                     filteredQuotes = []
                     for quote in quotes:
