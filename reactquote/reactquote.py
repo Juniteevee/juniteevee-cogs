@@ -63,15 +63,32 @@ class ReactQuote(commands.Cog):
                 message = await ctx.guild.get_channel(quotes[num]['channelId']).fetch_message(quotes[num]['messageId'])
                 await ctx.send(embed=self._buildQuote(message, num+1))
             elif(re.search("^\d+$", query) is not None):
+                """case id"""
                 num = int(query)
                 if num <= numQuotes:
                     message = await ctx.guild.get_channel(quotes[num-1]['channelId']).fetch_message(quotes[num-1]['messageId'])
                     await ctx.send(embed=self._buildQuote(message, num))
                 else:
                     await ctx.send(f"There are only {numQuotes} quotes")
-
+            elif(re.search("^@.+$", query) is not None):
+                """Case username"""
+                member: discord.Member = ctx.guild.get_member_named(query)
+                if member is None:
+                    ctx.send("User not found.\nWho are you talking about? OwO")
+                else:
+                    filteredQuotes = []
+                    for quote in quotes:
+                        if quote["authorId"] == member.id:
+                            filteredQuotes.append(quote)
+                    if len(filteredQuotes) == 0:
+                        ctx.send(f"No quotes by {member.name} found.\nSay something funny~ OwO")
+                    else:
+                        num = randrange(len(filteredQuotes))
+                        globalNum = quotes.index(filteredQuotes[num])
+                        message = await ctx.guild.get_channel(filteredQuotes[num]['channelId']).fetch_message(filteredQuotes[num]['messageId'])
+                        await ctx.send(embed=self._buildQuote(message, globalNum+1))
         else:
-            await ctx.send("No quotes added yet. Say something funny~ OwO")
+            await ctx.send("No quotes added yet.\nSay something funny~ OwO")
 
     @commands.admin_or_permissions(manage_guild=True)
     @commands.guild_only()
