@@ -74,19 +74,23 @@ class ReactQuote(commands.Cog):
                 """Case username"""
                 member: discord.Member = ctx.guild.get_member_named(query)
                 if member is None:
-                    ctx.send(f"{query} not found.\nWho are you talking about? OwO")
+                    await ctx.send(f"{query} not found.\nWho are you talking about? OwO")
                 else:
                     filteredQuotes = []
                     for quote in quotes:
                         if quote["authorId"] == member.id:
                             filteredQuotes.append(quote)
                     if len(filteredQuotes) == 0:
-                        ctx.send(f"No quotes by {member.name} found.\nSay something funny~ OwO")
+                        await ctx.send(f"No quotes by {member.name} found.\nSay something funny~ OwO")
                     else:
                         num = randrange(len(filteredQuotes))
                         globalNum = quotes.index(filteredQuotes[num])
                         message = await ctx.guild.get_channel(filteredQuotes[num]['channelId']).fetch_message(filteredQuotes[num]['messageId'])
                         await ctx.send(embed=self._buildQuote(message, globalNum+1))
+            else:
+                """Testing case"""
+                await ctx.send(f"{query} was not picked up. (This is for testing purposes)")
+
         else:
             await ctx.send("No quotes added yet.\nSay something funny~ OwO")
 
