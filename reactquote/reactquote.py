@@ -12,7 +12,10 @@ class ReactQuote(commands.Cog):
         self.bot = bot
         self.config = Config.get_conf(self, identifier=8368710483)
         default_guild = {
-            "quotes": []
+            "quotes": [],
+            "reactQuotesSettings": {
+                "outputChannel": None
+            }
         }
         self.config.register_guild(**default_guild)
 
@@ -59,6 +62,7 @@ class ReactQuote(commands.Cog):
         numQuotes = len(quotes)
         if numQuotes > 0:
             if(query == ""):
+                """case random"""
                 num = randrange(len(quotes))
                 message = await ctx.guild.get_channel(quotes[num]['channelId']).fetch_message(quotes[num]['messageId'])
                 await ctx.send(embed=self._buildQuote(message, num+1))
@@ -101,6 +105,30 @@ class ReactQuote(commands.Cog):
         """Remove Quote"""
         await self._removeQuote(ctx.guild, quote_num-1)
         await ctx.send(f"Removed quote #{quote_num}.")
+
+    @commands.admin_or_permissions(manage_guild=True)
+    @commands.guild_only()
+    @commands.command()
+    async def setquoteout(self, ctx: commands.Context):
+        """Sets Channel to be output for new Quotes"""
+        guild_group = self.config.guild(ctx.guild)
+        settings = await guild_group.settings()
+        settings["outputChannel"] = ctx.channel.id
+        await guild_group.quotes.set(settings)
+        await ctx.send("New Quotes will print here.")
+
+    
+    @commands.admin_or_permissions(manage_guild=True)
+    @commands.guild_only()
+    @commands.command()
+    async def allquotes(self, ctx: commands.Context):
+        """Print all quotes"""
+        quotes = await self.config.guild(ctx.guild).quotes()
+        for index, quote in enumerate(quotes):
+            message = await ctx.guild.get_channel(quote['channelId']).fetch_message(quote['messageId'])
+            await ctx.send(embed=self._buildQuote(message, index+1))
+
+
     
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload:discord.RawReactionActionEvent):
@@ -112,5 +140,10 @@ class ReactQuote(commands.Cog):
             pos = await self._addQuote(message)
             if pos >= 0:
                 await channel.send(f"New quote added by {user.display_name} as #{pos}\n({message.jump_url})")
+                guild_group = self.config.guild(message.guild)
+                settings = await guild_group.reactQuotesSettings()
+                if settings.outputChannel is not None:
+                    logChan = message.guild.get_channel(settings.outputChannel)
+                    await logChan.send(embed=self._buildQuote(message, pos))
         else:
             return
