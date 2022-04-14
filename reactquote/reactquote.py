@@ -112,9 +112,9 @@ class ReactQuote(commands.Cog):
     async def setquoteout(self, ctx: commands.Context):
         """Sets Channel to be output for new Quotes"""
         guild_group = self.config.guild(ctx.guild)
-        settings = await guild_group.settings()
+        settings = await guild_group.reactQuotesSettings()
         settings["outputChannel"] = ctx.channel.id
-        await guild_group.quotes.set(settings)
+        await guild_group.reactQuotesSettings.set(settings)
         await ctx.send("New Quotes will print here.")
 
     
