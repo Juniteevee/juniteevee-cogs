@@ -143,7 +143,7 @@ class ReactQuote(commands.Cog):
                 guild_group = self.config.guild(message.guild)
                 settings = await guild_group.reactQuotesSettings()
                 if settings["outputChannel"] is not None:
-                    logChan = message.guild.get_channel(settings.outputChannel)
+                    logChan = message.guild.get_channel(settings["outputChannel"])
                     await logChan.send(embed=self._buildQuote(message, pos))
         else:
             return
