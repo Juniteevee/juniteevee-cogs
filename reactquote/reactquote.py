@@ -142,7 +142,7 @@ class ReactQuote(commands.Cog):
                 await channel.send(f"New quote added by {user.display_name} as #{pos}\n({message.jump_url})")
                 guild_group = self.config.guild(message.guild)
                 settings = await guild_group.reactQuotesSettings()
-                if settings.outputChannel is not None:
+                if settings["outputChannel"] is not None:
                     logChan = message.guild.get_channel(settings.outputChannel)
                     await logChan.send(embed=self._buildQuote(message, pos))
         else:
