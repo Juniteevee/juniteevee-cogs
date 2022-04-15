@@ -94,13 +94,13 @@ class ReactQuote(commands.Cog):
             if(query == ""):
                 """case random"""
                 num = randrange(len(quotes))
-                embed = await self._buildQuote(ctx, quotes[num-1], num)
+                embed = await self._buildQuote(ctx, quotes[num], num+1)
                 await ctx.send(embed=embed)
             elif(re.search("^\d+$", query) is not None):
                 """case id"""
                 num = int(query)
                 if num <= numQuotes:
-                    embed = await self._buildQuote(ctx, quotes[num], num+1)
+                    embed = await self._buildQuote(ctx, quotes[num-1], num)
                     await ctx.send(embed=embed)
                 else:
                     await ctx.send(f"There are only {numQuotes} quotes")
