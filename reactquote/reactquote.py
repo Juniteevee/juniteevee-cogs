@@ -37,7 +37,8 @@ class ReactQuote(commands.Cog):
     async def _manualAddQuote(self, guild, author, message):
         formattedMsg = {
             "messageText": message,
-            "authorId": author.id
+            "authorId": author.id,
+            "messageId": None
         }
         guild_group = self.config.guild(guild)
         quotes = await guild_group.quotes()
