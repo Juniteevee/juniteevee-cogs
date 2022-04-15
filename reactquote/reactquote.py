@@ -100,7 +100,7 @@ class ReactQuote(commands.Cog):
                 """case id"""
                 num = int(query)
                 if num <= numQuotes:
-                    embed = await self._buildQuote(ctx, quotes[num-1], num)
+                    embed = await self._buildQuote(ctx, quotes[num - 1], num)
                     await ctx.send(embed=embed)
                 else:
                     await ctx.send(f"There are only {numQuotes} quotes")
