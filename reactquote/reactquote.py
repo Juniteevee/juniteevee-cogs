@@ -34,13 +34,43 @@ class ReactQuote(commands.Cog):
             await guild_group.quotes.set(quotes)
             return len(quotes)
     
+    async def _manualAddQuote(self, guild, author, message):
+        formattedMsg = {
+            "messageText": message,
+            "authorId": author.id
+        }
+        guild_group = self.config.guild(guild)
+        quotes = await guild_group.quotes()
+        if quotes.count(formattedMsg) > 0:
+            return -1
+        else:
+            quotes.append(formattedMsg)
+            await guild_group.quotes.set(quotes)
+            return len(quotes)
+    
     async def _removeQuote(self, guild: discord.Guild, n:int):
         guild_group = self.config.guild(guild)
         quotes = await guild_group.quotes()
         quotes.pop(n)
         await guild_group.quotes.set(quotes)
 
-    def _buildQuote(self, message, num:int):
+    async def _buildQuote(self, ctx:commands.Context, formattedMessage, num:int):
+        if formattedMessage["messageId"] is not None:
+            message = await ctx.guild.get_channel(formattedMessage['channelId']).fetch_message(formattedMessage['messageId'])
+            quote = f"{message.content}\n[(Jump)]({message.jump_url})"
+            timestamp = message.created_at
+            author = message.author
+        else:
+            message = formattedMessage["messageText"]
+            quote = f"{message}\n*Added Manually*"
+            timestamp = ctx.message.created_at
+            author = ctx.guild.get_member(formattedMessage["authorId"])
+        embed = discord.Embed(timestamp=timestamp)
+        embed.set_author(name=author.display_name, icon_url=author.avatar_url)
+        embed.add_field(name=f"#{num}", value=quote, inline=False)
+        return embed
+    
+    def _oldBuildQuote(self, message, num:int):
         quote = f"{message.content}\n[(Jump)]({message.jump_url})"
         timestamp = message.created_at
         embed = discord.Embed(timestamp=timestamp)
@@ -57,21 +87,20 @@ class ReactQuote(commands.Cog):
         'quote' returns random
         'quote 3' returns the #3 quote
         """
-        # Your code will go here
         quotes = await self.config.guild(ctx.guild).quotes()
         numQuotes = len(quotes)
         if numQuotes > 0:
             if(query == ""):
                 """case random"""
                 num = randrange(len(quotes))
-                message = await ctx.guild.get_channel(quotes[num]['channelId']).fetch_message(quotes[num]['messageId'])
-                await ctx.send(embed=self._buildQuote(message, num+1))
+                embed = await self._buildQuote(ctx, quotes[num], num+1)
+                await ctx.send(embed=embed)
             elif(re.search("^\d+$", query) is not None):
                 """case id"""
                 num = int(query)
                 if num <= numQuotes:
-                    message = await ctx.guild.get_channel(quotes[num-1]['channelId']).fetch_message(quotes[num-1]['messageId'])
-                    await ctx.send(embed=self._buildQuote(message, num))
+                    embed = await self._buildQuote(ctx, quotes[num], num+1)
+                    await ctx.send(embed=embed)
                 else:
                     await ctx.send(f"There are only {numQuotes} quotes")
             elif(len(ctx.message.mentions) > 0):
@@ -89,14 +118,43 @@ class ReactQuote(commands.Cog):
                     else:
                         num = randrange(len(filteredQuotes))
                         globalNum = quotes.index(filteredQuotes[num])
-                        message = await ctx.guild.get_channel(filteredQuotes[num]['channelId']).fetch_message(filteredQuotes[num]['messageId'])
-                        await ctx.send(embed=self._buildQuote(message, globalNum+1))
+                        embed = await self._buildQuote(ctx, filteredQuotes[num], globalNum+1)
+                        await ctx.send(embed=embed)
             else:
                 """Testing case"""
                 await ctx.send(f"{query} was not picked up. (This is for testing purposes)")
 
         else:
             await ctx.send("No quotes added yet.\nSay something funny~ OwO")
+
+    @commands.guild_only()
+    @commands.command()
+    async def addquote(self, ctx: commands.Context, *, query: str):
+        """Manually add quote. @ the speaker of quote to properly credit them"""
+        if query is None or len(query) == 0:
+            await ctx.send("No quote provided. What are you saying? OwO")
+        else:
+            quotes = await self.config.guild(ctx.guild).quotes()
+            numQuotes = len(quotes)
+            quote = f"{query}\n*Added Manually*)"
+            timestamp = ctx.message.created_at
+            embed = discord.Embed(timestamp=timestamp)
+            if len(ctx.message.mentions) > 0:
+                member: discord.Member = ctx.message.mentions[0]
+                self._manualAddQuote(self, ctx.guild, member, quote)
+                await ctx.send(f"New quote manually added by {ctx.author.display_name} as #{numQuotes}")
+                guild_group = self.config.guild(ctx.guild)
+                settings = await guild_group.reactQuotesSettings()
+                if settings["outputChannel"] is not None:
+                    logChan = ctx.guild.get_channel(settings["outputChannel"])
+                    formattedMsg = {
+                        "messageText": quote,
+                        "authorId": member.id
+                    }
+                    embed = await self._buildQuote(ctx, formattedMsg, numQuotes)
+                    await logChan.send(embed=embed)
+
+
 
     @commands.admin_or_permissions(manage_guild=True)
     @commands.guild_only()
@@ -125,8 +183,8 @@ class ReactQuote(commands.Cog):
         """Print all quotes"""
         quotes = await self.config.guild(ctx.guild).quotes()
         for index, quote in enumerate(quotes):
-            message = await ctx.guild.get_channel(quote['channelId']).fetch_message(quote['messageId'])
-            await ctx.send(embed=self._buildQuote(message, index+1))
+            embed = await self._buildQuote(ctx, quote, index+1)
+            await ctx.send(embed=embed)
 
 
     
@@ -144,6 +202,6 @@ class ReactQuote(commands.Cog):
                 settings = await guild_group.reactQuotesSettings()
                 if settings["outputChannel"] is not None:
                     logChan = message.guild.get_channel(settings["outputChannel"])
-                    await logChan.send(embed=self._buildQuote(message, pos))
+                    await logChan.send(embed=self._oldBuildQuote(message, pos))
         else:
             return
