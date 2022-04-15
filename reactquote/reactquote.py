@@ -142,7 +142,7 @@ class ReactQuote(commands.Cog):
             embed = discord.Embed(timestamp=timestamp)
             if len(ctx.message.mentions) > 0:
                 member: discord.Member = ctx.message.mentions[0]
-                self._manualAddQuote(ctx.guild, member, quote)
+                await self._manualAddQuote(ctx.guild, member, quote)
                 await ctx.send(f"New quote manually added by {ctx.author.display_name} as #{numQuotes}")
                 guild_group = self.config.guild(ctx.guild)
                 settings = await guild_group.reactQuotesSettings()
