@@ -94,7 +94,7 @@ class ReactQuote(commands.Cog):
             if(query == ""):
                 """case random"""
                 num = randrange(len(quotes))
-                embed = await self._buildQuote(ctx, quotes[num], num+1)
+                embed = await self._buildQuote(ctx, quotes[num-1], num)
                 await ctx.send(embed=embed)
             elif(re.search("^\d+$", query) is not None):
                 """case id"""
@@ -150,7 +150,8 @@ class ReactQuote(commands.Cog):
                     logChan = ctx.guild.get_channel(settings["outputChannel"])
                     formattedMsg = {
                         "messageText": quote,
-                        "authorId": member.id
+                        "authorId": member.id,
+                        "messageId": None
                     }
                     embed = await self._buildQuote(ctx, formattedMsg, numQuotes)
                     await logChan.send(embed=embed)
