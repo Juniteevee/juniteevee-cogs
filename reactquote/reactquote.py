@@ -137,7 +137,7 @@ class ReactQuote(commands.Cog):
         else:
             quotes = await self.config.guild(ctx.guild).quotes()
             numQuotes = len(quotes)
-            quote = f"{query}\n*Added Manually*)"
+            quote = f"{query}"
             timestamp = ctx.message.created_at
             embed = discord.Embed(timestamp=timestamp)
             if len(ctx.message.mentions) > 0:
@@ -153,7 +153,7 @@ class ReactQuote(commands.Cog):
                         "authorId": member.id,
                         "messageId": None
                     }
-                    embed = await self._buildQuote(ctx, formattedMsg, numQuotes)
+                    embed = await self._buildQuote(ctx, formattedMsg, numQuotes+1)
                     await logChan.send(embed=embed)
 
 
