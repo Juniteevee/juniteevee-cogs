@@ -21,6 +21,8 @@ class ChatGpt(commands.Cog):
             "email": openAiKeys.get("email"),
             "password": openAiKeys.get("password"), 
         }
-        await ctx.send(f"email {self.config.email}, password {self.config.password}")
+        email = openAiKeys.get("email")
+        password = openAiKeys.get("password")
+        await ctx.send(f"email {email}, password {password}")
 
     
