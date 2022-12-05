@@ -17,8 +17,8 @@ class ChatGpt(commands.Cog):
         config = await self.setCredentials(ctx)
 
         chatbot = Chatbot(config, conversation_id=None)
-        chatbot.reset_chat()
-        chatbot.refresh_session()
+        """chatbot.reset_chat()
+        chatbot.refresh_session()"""
         resp = chatbot.get_chat_response(msg, output="text")
 
         await ctx.send(f"{resp['message']}")
