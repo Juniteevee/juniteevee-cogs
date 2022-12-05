@@ -14,15 +14,21 @@ class ChatGpt(commands.Cog):
     @commands.command()
     async def testchat(self, ctx: commands.Context):
         """Test"""
+        config = await this.setCredentials(ctx)
+
+        email = config.get("email")
+        password = config.get("password")
+        await ctx.send(f"email {email}, password {password}")
+
+    async def setCredentials(self, ctx: commands.Context):
         openAiKeys = await self.bot.get_shared_api_tokens("openai")
         if openAiKeys.get("email") is None or openAiKeys.get("password") is None:
             return await ctx.send("The openai email and password keys have not been set.")
-        self.config =  {
+        config =  {
             "email": openAiKeys.get("email"),
             "password": openAiKeys.get("password"), 
         }
-        email = openAiKeys.get("email")
-        password = openAiKeys.get("password")
-        await ctx.send(f"email {email}, password {password}")
+        return config
+
 
     
