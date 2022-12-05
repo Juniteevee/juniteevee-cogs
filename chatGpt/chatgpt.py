@@ -10,16 +10,17 @@ class ChatGpt(commands.Cog):
 
     async def __init__(self, bot):
         self.bot = bot
+
+    @commands.command()
+    async def testchat(self, ctx: commands.Context):
+        """Test"""
+        
         email = await self.bot.get_shared_api_tokens("openai", "email")
         password = await self.bot.get_shared_api_tokens("openai", "password")
         self.config =  {
             "email": email,
             "password": password, 
         }
-
-    @commands.command()
-    async def testchat(self, ctx: commands.Context):
-        """Test"""
         await ctx.send(f"email {self.config.email}, password {self.config.password}")
 
     
