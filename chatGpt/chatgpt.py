@@ -15,6 +15,8 @@ class ChatGpt(commands.Cog):
     async def testchat(self, ctx: commands.Context):
         """Test"""
         openAiKeys = await self.bot.get_shared_api_tokens("openai")
+        if openAiKeys.get("email") is None or openAiKeys.get("password") is None:
+            return await ctx.send("The openai email and password keys have not been set.")
         self.config =  {
             "email": openAiKeys.get("email"),
             "password": openAiKeys.get("password"), 
