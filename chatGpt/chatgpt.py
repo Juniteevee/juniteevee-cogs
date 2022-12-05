@@ -14,7 +14,7 @@ class ChatGpt(commands.Cog):
     @commands.command()
     async def testchat(self, ctx: commands.Context):
         """Test"""
-        config = await this.setCredentials(ctx)
+        config = await self.setCredentials(ctx)
 
         email = config.get("email")
         password = config.get("password")
