@@ -8,7 +8,7 @@ from revChatGPT.revChatGPT import Chatbot
 class ChatGpt(commands.Cog):
     """Cog to enable chat powered by OpenAi Chat GPT"""
 
-    async def __init__(self, bot):
+    def __init__(self, bot):
         self.bot = bot
 
     @commands.command()
