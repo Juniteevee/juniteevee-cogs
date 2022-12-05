@@ -29,7 +29,8 @@ class ChatGpt(commands.Cog):
             return await ctx.send("The openai email and password keys have not been set.")
         config =  {
             "email": openAiKeys.get("email"),
-            "password": openAiKeys.get("password"), 
+            "password": openAiKeys.get("password"),
+            "Authorization": None,
         }
         return config
 
