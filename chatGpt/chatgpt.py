@@ -14,12 +14,10 @@ class ChatGpt(commands.Cog):
     @commands.command()
     async def testchat(self, ctx: commands.Context):
         """Test"""
-        
-        email = await self.bot.get_shared_api_tokens("openai", "email")
-        password = await self.bot.get_shared_api_tokens("openai", "password")
+        openAiKeys = await self.bot.get_shared_api_tokens("openai")
         self.config =  {
-            "email": email,
-            "password": password, 
+            "email": openAiKeys.get("email"),
+            "password": openAiKeys.get("password"), 
         }
         await ctx.send(f"email {self.config.email}, password {self.config.password}")
 
