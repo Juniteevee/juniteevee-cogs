@@ -1,0 +1,9 @@
+{
+    "AUTHOR" : "Juni (juniteevee)",
+    "DESCRIPTION" : "Enable chatting with bot using OpenAi ChatGPT",
+    "DISABLED" : false,
+    "SHORT" : "Enable chatting with bot using OpenAi ChatGPT",
+    "NAME" : "Chat-Gpt",
+    "INSTALL_CMD" : "ChatGPT. Install at own risk",
+    "REQUIREMENTS" : ["revChatGPT"]
+}
