@@ -351,7 +351,7 @@ class RSS(commands.Cog):
             else:
                 return None
 
-        if len(website.split(".")) < 3:
+        if len(website.split(".")) < 2:
             return None
 
         return website
@@ -1084,13 +1084,13 @@ class RSS(commands.Cog):
         """
         Add a website to the list for a time parsing override.
 
-        Use a website link formatted like `www.website.com` or `https://www.website.com`.
+        Use a website link formatted like `www.website.com` or `https://website.com`.
         For more information, use `[p]help rss parse`.
         """
         website = self._find_website(website_url)
         if not website:
             msg = f"I can't seem to find a website in `{website_url}`. "
-            msg += "Use something like `https://www.website.com/` or `www.website.com`."
+            msg += "Use something like `https://website.com/` or `www.website.com`."
             await ctx.send(msg)
             return
 
