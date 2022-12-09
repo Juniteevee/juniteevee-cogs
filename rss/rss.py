@@ -1405,7 +1405,7 @@ class RSS(commands.Cog):
                     log.debug(f"New entry found via time and link validation for feed {name} on cid {channel.id}")
                     feedparser_plus_obj = await self._add_to_feedparser_object(entry, url)
                     feedparser_plus_objects.append(feedparser_plus_obj)
-                if (last_title == "" and entry_title == "") and (last_link != entry_link) and (last_time < entry_time):
+                elif (last_title == "" and entry_title == "") and (last_link != entry_link) and (last_time < entry_time):
                     log.debug(f"New entry found via time validation for feed {name} on cid {channel.id} - no title")
                     feedparser_plus_obj = await self._add_to_feedparser_object(entry, url)
                     feedparser_plus_objects.append(feedparser_plus_obj)
